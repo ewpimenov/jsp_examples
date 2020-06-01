@@ -24,8 +24,8 @@ public class UserService {
         return userDao.getUser(id);
     }
 
-    public boolean addUser(User user) throws SQLException {
-       return userDao.addUser(user);
+    public void addUser(User user) throws SQLException {
+        userDao.addUser(user);
     }
 
     public boolean deleteUser(User user) throws SQLException {

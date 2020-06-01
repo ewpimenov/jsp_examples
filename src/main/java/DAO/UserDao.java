@@ -35,16 +35,13 @@ public class UserDao {
         return users;
     }
 
-    public boolean addUser(User user) throws SQLException {
+    public void addUser(User user) throws SQLException {
         String sql = "INSERT INTO user_table (name, password) VALUES (?, ?)";
         PreparedStatement stmt = connection.prepareStatement(sql);
         stmt.setString(1, user.getName());
         stmt.setString(2, user.getPassword());
-        System.out.println(stmt);
-
-        boolean rowInserted = stmt.executeUpdate() > 0;
+        stmt.execute();
         stmt.close();
-        return rowInserted;
     }
 
     public boolean deleteUser(User user) throws SQLException {
@@ -58,7 +55,7 @@ public class UserDao {
     }
 
     public boolean updateUser(User user) throws SQLException {
-        String sql = "update user_table set name = ?, password= ? + where id = ?";
+        String sql = "update user_table set name = ?, password= ? where id = ?";
         PreparedStatement stmt = connection.prepareStatement(sql);
         stmt.setString(1, user.getName());
         stmt.setString(2, user.getPassword());
