@@ -1,8 +1,11 @@
 package service;
 
 import DAO.UserDao;
+import DAO.UserHibernateDAO;
+import org.hibernate.SessionFactory;
+import user.DBHelper;
 import user.User;
-
+ 
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -11,29 +14,51 @@ import java.util.List;
 
 public class UserService {
 
-    private UserDao userDao = getUserDao();
+    private static UserService service;
+
+    private SessionFactory sessionFactory;
+
+    private UserService(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    private static UserHibernateDAO getUserHibernateDAO() {
+        return new UserHibernateDAO(service.sessionFactory.openSession());
+    }
+
+    public static UserService getInstance() {
+        if (service == null) {
+            service = new UserService(DBHelper.getSessionFactory());
+        }
+        return service;
+    }
+
+
+    //ниже то, что было
+
+    //private UserDao userDao = getUserDao();
 
     public UserService() {
     }
 
     public List<User> getAllUsers() throws SQLException {
-        return userDao.getAllUsers();
+        return getUserHibernateDAO().getAllUsers();
     }
 
     public User getUser(int id) throws SQLException {
-        return userDao.getUser(id);
+        return getUserHibernateDAO().getUser(id);
     }
 
     public void addUser(User user) throws SQLException {
-        userDao.addUser(user);
+        getUserHibernateDAO().addUser(user);
     }
 
-    public boolean deleteUser(User user) throws SQLException {
-        return userDao.deleteUser(user);
+    public void deleteUser(User user) throws SQLException {
+        getUserHibernateDAO().deleteUser(user);
     }
 
-    public boolean updateUser(User user) throws SQLException {
-       return userDao.updateUser(user);
+    public void updateUser(User user) throws SQLException {
+        getUserHibernateDAO().updateUser(user);
     }
 
     private static Connection getMysqlConnection() {

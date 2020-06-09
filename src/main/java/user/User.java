@@ -1,13 +1,21 @@
 package user;
 
+import javax.persistence.*;
 import java.util.Objects;
-
+@Entity
+@Table(name = "user_table")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name ="password")
     private String password;
 
-    public User(int id) {
+    public User() {
     }
 
     public User(int id, String name, String password) {

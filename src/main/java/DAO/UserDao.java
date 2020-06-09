@@ -2,6 +2,7 @@ package DAO;
 
 import java.util.List;
 
+import interfaceDAO.UserDAO;
 import user.User;
 
 import java.sql.Connection;
@@ -10,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class UserDao {
+public class UserDao implements UserDAO {
 
     private Connection connection;
 
@@ -44,26 +45,22 @@ public class UserDao {
         stmt.close();
     }
 
-    public boolean deleteUser(User user) throws SQLException {
+    public void deleteUser(User user) throws SQLException {
         String sql = "delete from user_table where id = ?";
         PreparedStatement stmt = connection.prepareStatement(sql);
         stmt.setInt(1, user.getId());
-
-        boolean rowDeleted = stmt.executeUpdate() > 0;
+        stmt.executeUpdate();
         stmt.close();
-        return rowDeleted;
     }
 
-    public boolean updateUser(User user) throws SQLException {
+    public void updateUser(User user) throws SQLException {
         String sql = "update user_table set name = ?, password= ? where id = ?";
         PreparedStatement stmt = connection.prepareStatement(sql);
         stmt.setString(1, user.getName());
         stmt.setString(2, user.getPassword());
         stmt.setInt(3, user.getId());
-
-        boolean rowUpdated = stmt.executeUpdate() > 0;
+        stmt.executeUpdate();
         stmt.close();
-        return rowUpdated;
     }
 
     public User getUser(int id) throws SQLException {
